@@ -1,153 +1,41 @@
 ﻿using QuestPDF;
 using QuestPDF.Fluent;
-using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-using QuestPDFTest.Generators;
+using QuestPDFTest.Extensions;
 
 var start = DateTime.UtcNow;
 
 QuestPDF.Settings.License = LicenseType.Community;
 
-var paths = QuestPDF.Settings.FontDiscoveryPaths;
-paths.Clear();
-
-paths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LatoFont"));
-
-var emptyDirPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "empty");
-if (Directory.Exists(emptyDirPath) == false)
-{
-    Directory.CreateDirectory(emptyDirPath);
-}
-paths.Add(emptyDirPath);
+QuestPDF.Settings.FontDiscoveryPaths.Clear();
+QuestPDF.Settings.FontDiscoveryPaths.Add(@"C:\Users\chaim\source\projects\aidace\TestProjects\QuestPDF\bin\Debug\net8.0\LatoFont");
 
 
-var resources = ResourcesGenerator.GetResourcesPDFModels();
+QuestPDF.Fluent.Document doc = PdfGenerators.GetHelloWorld();
 
-// code in your main method
-var doc = QuestPDF.Fluent.Document.Create(container =>
-{
-    container.Page(page =>
-    {
-        page.Size(PageSizes.A4);
-        page.Margin(2, Unit.Centimetre);
-        page.PageColor(Colors.White);
-        page.DefaultTextStyle(x => x.FontSize(12));
+var helloWorldPath = @"C:\Users\chaim\Desktop\dev\aidace\doc-gen-forms\hello-world.pdf";
+var helloWorldQpdfPath = @"C:\Users\chaim\Desktop\dev\aidace\doc-gen-forms\hello-world-qpdf.pdf";
 
-        page.Header()
-            .Text("Accounts")
-            .SemiBold().FontSize(25).FontColor(Colors.Blue.Medium);
+helloWorldPath = "/berel/hello-world.pdf";
+helloWorldQpdfPath = "/berel/hello-world-qpdf.pdf";
 
-        page.Content()
-            .Table(tbl =>
-            {
-                tbl.ColumnsDefinition(col =>
-                {
-                    col.RelativeColumn();
-                    col.RelativeColumn();
-                    col.RelativeColumn();
-                    col.RelativeColumn();
-                    col.RelativeColumn();
-                    col.RelativeColumn();
-                });
+doc.GeneratePdf(helloWorldPath);
 
-                uint rowCounter = 1;
-
-                // header
-                tbl.Cell().Row(rowCounter).Column(1).Element(HeaderBlock).Text("Type");
-                tbl.Cell().Row(rowCounter).Column(2).Element(HeaderBlock).Text("Bank Name");
-                tbl.Cell().Row(rowCounter).Column(3).Element(HeaderBlock).Text("Bank Address");
-                tbl.Cell().Row(rowCounter).Column(4).Element(HeaderBlock).Text("Account Number");
-                tbl.Cell().Row(rowCounter).Column(5).Element(HeaderBlock).Text("Current Value");
-                tbl.Cell().Row(rowCounter).Column(6).Element(HeaderBlock).Text("Names on account");
-
-                foreach (var resource in resources)
-                {
-                    rowCounter++;
-
-                    tbl.Cell().Row(rowCounter).Column(1).Element(ContentBlock).Text(resource.AccountTypeDisplay);
-                    tbl.Cell().Row(rowCounter).Column(2).Element(ContentBlock).Text(resource.InstitutionName);
-                    tbl.Cell().Row(rowCounter).Column(3).Element(ContentBlock);
-                    tbl.Cell().Row(rowCounter).Column(4).Element(ContentBlock).Text(resource.AccountNumber);
-                    tbl.Cell().Row(rowCounter).Column(5).Element(ContentBlock).Text(resource.CurrentValue.ToString("$#,##0.00"));
-                    tbl.Cell().Row(rowCounter).Column(6).Element(ContentBlock);
-                }
-            });
-
-        page.Footer()
-            .AlignCenter()
-            .Text(x =>
-            {
-                x.Span("Page ");
-                x.CurrentPageNumber();
-            });
-    });
-
-    container.Page(page =>
-    {
-        page.Size(PageSizes.A4);
-        page.Margin(2, Unit.Centimetre);
-        page.PageColor(Colors.White);
-        page.DefaultTextStyle(x => x.FontSize(12));
-
-        page.Header()
-            .Text("Accounts")
-            .SemiBold().FontSize(25).FontColor(Colors.Blue.Medium);
-
-        page.Content()
-            .Table(tbl =>
-            {
-                tbl.ColumnsDefinition(col =>
-                {
-                    col.RelativeColumn();
-                    col.RelativeColumn();
-                    col.RelativeColumn();
-                    col.RelativeColumn();
-                    col.RelativeColumn();
-                    col.RelativeColumn();
-                });
-
-                uint rowCounter = 1;
-
-                // header
-                tbl.Cell().Row(rowCounter).Column(1).Element(HeaderBlock).Text("Type");
-                tbl.Cell().Row(rowCounter).Column(2).Element(HeaderBlock).Text("Bank Name");
-                tbl.Cell().Row(rowCounter).Column(3).Element(HeaderBlock).Text("Bank Address");
-                tbl.Cell().Row(rowCounter).Column(4).Element(HeaderBlock).Text("Account Number");
-                tbl.Cell().Row(rowCounter).Column(5).Element(HeaderBlock).Text("Current Value");
-                tbl.Cell().Row(rowCounter).Column(6).Element(HeaderBlock).Text("Names on account");
-
-                foreach (var resource in resources)
-                {
-                    rowCounter++;
-
-                    tbl.Cell().Row(rowCounter).Column(1).Element(ContentBlock).Text(resource.AccountTypeDisplay);
-                    tbl.Cell().Row(rowCounter).Column(2).Element(ContentBlock).Text(resource.InstitutionName);
-                    tbl.Cell().Row(rowCounter).Column(3).Element(ContentBlock);
-                    tbl.Cell().Row(rowCounter).Column(4).Element(ContentBlock).Text(resource.AccountNumber);
-                    tbl.Cell().Row(rowCounter).Column(5).Element(ContentBlock).Text(resource.CurrentValue.ToString("$#,##0.00"));
-                    tbl.Cell().Row(rowCounter).Column(6).Element(ContentBlock);
-                }
-            });
-
-        page.Footer()
-            .AlignCenter()
-            .Text(x =>
-            {
-                x.Span("Page ");
-                x.CurrentPageNumber();
-            });
-    });
-});
-
+var docOperation = DocumentOperation.LoadFile(helloWorldPath);
+docOperation.Save(helloWorldQpdfPath);
 
 // SearchFontFiles(QuestPDF.Settings.FontDiscoveryPaths);
 
 // doc.GeneratePdf($"{Guid.NewGuid():n}.pdf");
-doc.GeneratePdf();
+
+
+// doc.ShowInCompanion();
 
 var end = DateTime.UtcNow;
 
 Console.WriteLine($"Ran for {end.Subtract(start).TotalMilliseconds} ms");
+
+
 
 
 ICollection<string> SearchFontFiles(ICollection<string> col)
@@ -169,29 +57,4 @@ ICollection<string> SearchFontFiles(ICollection<string> col)
     return applicationFiles
         .Where(x => supportedFontExtensions.Contains(Path.GetExtension(x).ToLowerInvariant()))
         .ToList();
-}
-
-static IContainer HeaderBlock(IContainer container)
-{
-    return container
-        .Border(1)
-        .Background(Colors.Grey.Lighten1)
-        .ShowOnce()
-        .MinWidth(50)
-        .MinHeight(50)
-        .AlignCenter()
-        .AlignMiddle();
-}
-
-
-static IContainer ContentBlock(IContainer container)
-{
-    return container
-        .Border(1)
-        .Background(Colors.Grey.Lighten5)
-        .ShowOnce()
-        .MinWidth(50)
-        .MinHeight(50)
-        .AlignCenter()
-        .AlignMiddle();
 }

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestPDFTest", "QuestPDF\QuestPDFTest.csproj", "{B7838D5D-EC61-4862-9934-4BE9DEC44C1E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfSharpTests", "PdfSharpTests\PdfSharpTests.csproj", "{F5EC3FF9-1F4B-4F11-9531-9093D5DD3FD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B7838D5D-EC61-4862-9934-4BE9DEC44C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7838D5D-EC61-4862-9934-4BE9DEC44C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7838D5D-EC61-4862-9934-4BE9DEC44C1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5EC3FF9-1F4B-4F11-9531-9093D5DD3FD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5EC3FF9-1F4B-4F11-9531-9093D5DD3FD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5EC3FF9-1F4B-4F11-9531-9093D5DD3FD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5EC3FF9-1F4B-4F11-9531-9093D5DD3FD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
